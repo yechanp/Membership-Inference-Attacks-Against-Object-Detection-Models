@@ -17,7 +17,15 @@ python train_Chainer_ssd_voc_target.py  [gpu_id]
 
 ```
 
-To run the code, please execute 
+To train the attacker using the shadow model with the shadow dataset, please execute 
 ```
 python mia_train_attacker_.py  config.py
 ```
+To attack the target object detection model, please execute
+```
+python mia_evaluate.py  config.py
+```
+
+## Trained Object detection weights 
+
+For VOC-SSD300 models, you can download the weights of the shadow and target models at https://drive.google.com/drive/folders/1E45q9K1kqLzVqyYrrpZid07oq4JN5Z-V?usp=sharing 
