@@ -30,4 +30,6 @@ python mia_evaluate.py  config.py
 
 ## Trained Object Detection Model Weights 
 
-For VOC-SSD300 models, you can download the weights of the shadow and target models at https://drive.google.com/drive/folders/1E45q9K1kqLzVqyYrrpZid07oq4JN5Z-V?usp=sharing 
+For VOC-SSD300 models, you can download the weights of the shadow and target models at https://drive.google.com/drive/folders/1E45q9K1kqLzVqyYrrpZid07oq4JN5Z-V?usp=sharing .
+
+Futher model weights will be uploaded soon.
