@@ -6,6 +6,7 @@ class Config():
     LOAD_DIR_META = 'saved_model/fastercnn_model_right_200000.npz'
     id_           = 'FR_200k_normal_right_rpnNMS070'
     SHADOW_MODEL  = 'FR_vgg'  # FR_vgg for Faster R CNN
+    ATTACK_MODEL  = 'alex'  # 'shallow'
 
     
     PREDICT_ONE_EACH_BOX = False
