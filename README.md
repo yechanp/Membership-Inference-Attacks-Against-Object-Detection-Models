@@ -1,6 +1,6 @@
 # Membership-Inference-Attacks-Against-Object-Detection-Models
 
-This is the codes for  https://arxiv.org/abs/2001.04011(Membership Inference Attacks Against Object Detection Models).
+This is the codes for  https://arxiv.org/abs/2001.04011 (Membership Inference Attacks Against Object Detection Models).
 
 
 ## Requirements
