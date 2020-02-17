@@ -17,6 +17,8 @@ from chainercv.datasets import voc_bbox_label_names
 from chainercv.datasets import VOCBboxDataset
 from chainercv.extensions import DetectionVOCEvaluator
 
+from chainercv.links import SSD300
+from chainercv.links import SSD512
 from chainercv.links import FasterRCNNVGG16
 from chainercv.links.model.faster_rcnn import FasterRCNNTrainChain
 from chainer.training.extensions.value_observation import observe_value
