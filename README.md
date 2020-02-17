@@ -26,6 +26,6 @@ To attack the target object detection model, please execute
 python mia_evaluate.py  config.py
 ```
 
-## Trained Object detection weights 
+## Trained Object Detection Model Weights 
 
 For VOC-SSD300 models, you can download the weights of the shadow and target models at https://drive.google.com/drive/folders/1E45q9K1kqLzVqyYrrpZid07oq4JN5Z-V?usp=sharing 
