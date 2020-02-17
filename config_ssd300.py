@@ -3,8 +3,8 @@ class Config():
     batch_size = 8 #1 
     
     
-    SHADOW_MODEL_DIR = 'saved_model/ssd300_model_vocall_trval_lrdrop_right_500000.npz'
-    TARGET_MODEL_DIR = 'saved_model/ssd300_model_vocall_trval_left_100000.npz'
+    SHADOW_MODEL_DIR = 'saved_model/ssd300_model_vocall_shadow_500000.npz'
+    TARGET_MODEL_DIR = 'saved_model/ssd300_model_vocall_target100000.npz'
     ATTACK_MODEL_DIR = 'attackmodel'
     id_           = 'ssd_500k_normal_right'#'FR_200k_normal_right_rpnNMS070'
     SHADOW_MODEL_TYPE  = 'ssd300_vgg' #  ['ssd300_vgg'  , 'FR_vgg' ]  
