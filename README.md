@@ -2,9 +2,10 @@
 
 
 ## Requirements
-*python
-*Chainer 
-*Pytorch
+
+* python
+* Chainer 
+* Pytorch
 
 
 To run the code, please execute 
