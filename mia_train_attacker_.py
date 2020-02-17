@@ -13,12 +13,15 @@ from chainer import training
 from chainer.training import extensions
 from chainer.training import triggers
 
+
+
 from chainercv.datasets import voc_bbox_label_names
 from chainercv.datasets import VOCBboxDataset
 from chainercv.extensions import DetectionVOCEvaluator
 
 from chainercv.links import SSD300
 from chainercv.links import SSD512
+
 from chainercv.links import FasterRCNNVGG16
 from chainercv.links.model.faster_rcnn import FasterRCNNTrainChain
 from chainer.training.extensions.value_observation import observe_value
@@ -48,23 +51,23 @@ def print_(x):
       print(x)
 chainer.config.cv_resize_backend = "cv2"
 INFER_DIR = 'voc07_trans'
-LOAD_DIR_META  = config.LOAD_DIR_META
+SHADOW_MODEL_DIR  = config.SHADOW_MODEL_DIR
 id_            =  config.id_
 
-if 'left' in LOAD_DIR_META:
+if 'left' in SHADOW_MODEL_DIR or 'target' in SHADOW_MODEL_DIR:
     subset = 'left'
-elif 'right' in LOAD_DIR_META or 'rigth' in LOAD_DIR_META:
+elif 'right' in SHADOW_MODEL_DIR or 'shadow' in SHADOW_MODEL_DIR:
     subset = 'right'
 else:
     raise ZeroDivisionError
 
     
-SHADOW_MODEL  = config.SHADOW_MODEL
+SHADOW_MODEL_TYPE  = config.SHADOW_MODEL_TYPE
 
 
-ATTACK_MODEL=config.ATTACK_MODEL # 'alex' #ATTACK_MODEL='shallow'
+ATTACK_MODEL=config.ATTACK_MODEL 
 
-print('SHADOW_MODEL : {}'.format(SHADOW_MODEL))
+print('SHADOW_MODEL_TYPE : {}'.format(SHADOW_MODEL_TYPE))
     
 
 
@@ -77,15 +80,15 @@ batch_size  = config.batch_size
 
 PREDICT_ONE_EACH_BOX = config.PREDICT_ONE_EACH_BOX
 
-if SHADOW_MODEL == 'ssd300_vgg':
+if SHADOW_MODEL_TYPE == 'ssd300_vgg':
     model = SSD300(n_fg_class=21,pretrained_model='imagenet')
-if SHADOW_MODEL == 'ssd512_vgg':
+if SHADOW_MODEL_TYPE == 'ssd512_vgg':
     model = SSD512(n_fg_class=21,pretrained_model='imagenet')
-if SHADOW_MODEL == 'ssd_res50':
+if SHADOW_MODEL_TYPE == 'ssd_res50':
     model = SSD300_Resnet(n_fg_class=21,pretrained_model='imagenet')
-if SHADOW_MODEL == 'FR_vgg':
-    MIN_SIZE=config.MIN_SIZE # 600 by default
-    MAX_SIZE=config.MAX_SIZE # 800 by default   
+if SHADOW_MODEL_TYPE == 'FR_vgg':
+    MIN_SIZE=config.MIN_SIZE 
+    MAX_SIZE=config.MAX_SIZE 
     model = FasterRCNNVGG16(n_fg_class=len(voc_bbox_label_names),
                                   pretrained_model='imagenet',min_size=MIN_SIZE,max_size=MAX_SIZE)
 model.to_gpu(gpu_id)
@@ -97,10 +100,10 @@ if PREDICT_ONE_EACH_BOX:
         label = []
         prob = []
         best_class = raw_prob.argmax(axis=1)
-        self.raw_cls_bbox  = raw_cls_bbox   ####
+        self.raw_cls_bbox  = raw_cls_bbox   
         if True:
             best_class = best_class[:len(raw_cls_bbox)]
-            cls_bbox_l = raw_cls_bbox.reshape((-1, self.n_class, 4)) #raw_cls_bbox.reshape((-1, self.n_class, 4))[:, l, :]
+            cls_bbox_l = raw_cls_bbox.reshape((-1, self.n_class, 4)) 
             
             cls_bbox_l = xp.array([cls_bbox_l[i,item,:] for i,item in enumerate(best_class)])
             
@@ -217,14 +220,14 @@ elif subset == 'right':
 model.to_cpu()
 model.to_gpu()
 model.use_preset('evaluate')
-model.score_thresh                       = config.model_score_thresh# 0.01
-model.nms_thresh                         = config.model_nms_thresh#1.00
+model.score_thresh                       = config.model_score_thresh
+model.nms_thresh                         = config.model_nms_thresh
 
-if SHADOW_MODEL == 'FR_vgg':
+if SHADOW_MODEL_TYPE == 'FR_vgg':
 
-    model.rpn.proposal_layer.nms_thresh      = config.model_rpn_proposal_layer_nms_thresh#0.70   #0.8  # 0.7
-    model.rpn.proposal_layer.n_test_pre_nms  = config.model_rpn_proposal_layer_n_test_pre_nms#6000   # 6000
-    model.rpn.proposal_layer.n_test_post_nms = config.model_rpn_proposal_layer_n_test_post_nms#6000    # 300
+    model.rpn.proposal_layer.nms_thresh      = config.model_rpn_proposal_layer_nms_thresh
+    model.rpn.proposal_layer.n_test_pre_nms  = config.model_rpn_proposal_layer_n_test_pre_nms
+    model.rpn.proposal_layer.n_test_post_nms = config.model_rpn_proposal_layer_n_test_post_nms
 
 lr_attack = 1e-5
 
@@ -252,8 +255,8 @@ else:
         r= a
         raise ZeroDivisionError
         return r
-MAX_LEN           = config.MAX_LEN      # 6000# 5000
-CANVAS_TYPE       = config.CANVAS_TYPE  # 'original' #CANVAS_TYPE = 'original'
+MAX_LEN           = config.MAX_LEN      
+CANVAS_TYPE       = config.CANVAS_TYPE  
 QUICK             = config.QUICK
 SMALL_SET   = 0
 EPOCHS      = 61
@@ -269,17 +272,16 @@ if True:
         id_     += '_pretrain_'
     if CANVAS_TYPE == 'original':
         id_ += '_'+CANVAS_TYPE+'_'
-    if MAX_LEN != 5000:
+    if MAX_LEN <5000 :
         id_     += '_MAX_LEN_{}_'.format(MAX_LEN)
 
     if LOG_SCORE:
         if type( LOG_SCORE ) == bool:
             id_ += '_'+'LOG_SCORE'+'_'
         else:
-            id_ += '_'+'LOG_SCORE_{}'.format(LOG_SCORE)+'_'
+            id_ += '_'+'LOG_SCORE_'
     if PREDICT_ONE_EACH_BOX:
          id_    += '_predictEach_'
-    id_ += '_lr1e'+str(str(lr_attack).count('0'))
 ball_size = input_size*0.1
 
     
@@ -372,9 +374,9 @@ from torch.utils.data.sampler import SubsetRandomSampler
 from torch.utils.data.dataset import Dataset
 import time
 if True:
-    load_dir  = LOAD_DIR_META
+    load_dir  = SHADOW_MODEL_DIR
     chainer.serializers.load_npz(os.path.join(load_dir), model,)
-    print_('current iter : {}'.format(iter))
+    #print_('current iter : {}'.format(iter))
 
     size300_meta_train_dataset = []
 
