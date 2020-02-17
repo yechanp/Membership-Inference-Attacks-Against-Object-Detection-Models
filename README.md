@@ -2,6 +2,6 @@
 
 
 To run the code, please execute 
-'''
+```
 python mia_train_attacker_.py  config.py
-'''
+```
