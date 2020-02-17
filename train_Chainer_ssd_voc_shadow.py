@@ -108,24 +108,7 @@ class save_model(training.Extension): #ver 1.2
         curr_iter = trainer.updater.iteration+self.before_iter
         if curr_iter>self.save_after:
             chainer.serializers.save_npz(self.saved_dir+self.save_name[:-4]+'_'+str(curr_iter)+'.npz', model,)
-class evaluate_model(training.Extension):
-    def __init__(self,model,evaluator,gpu_id):
-        self.model  = model
-        self.gpu_id = gpu_id
-        self.evaluator = evaluator
-    def __call__(self,trainer):
-        try:
-            pass
-            #model.to_cpu()
-            #model.to_gpu(self.gpu_id)
-            #eval_result = evaluator()
-            #voc_mAP=eval_result['validation/main/map']
-            #voc_mAP=eval_result
-           # Eprint(voc_mAP)
-            #reporter.report({'VOC_acc':voc_mAP})
-        except AssertionError:
-            print('AssertionError occured')
-            pass
+
 
 steps = [200000 , 400000]
 lr_trigger= triggers.ManualScheduleTrigger(steps, 'iteration')
@@ -139,9 +122,8 @@ trainer.extend(extensions.ExponentialShift('lr', 0.1), trigger=lr_trigger)
 #trainer.extend(evaluator,trigger=(50000, 'iteration'))
 trainer.extend(training.extensions.LogReport(log_name='ssd_report'+SAVE_PATH,trigger=(1000, 'iteration')))
 trainer.extend(extensions.observe_lr(), trigger=(1000, 'iteration'))
-trainer.extend(training.extensions.PrintReport(['iteration','lr' , 'main/loss', 'main/loss/loc','main/loss/conf','validation/VOC_acc']))
+trainer.extend(training.extensions.PrintReport(['iteration','lr' , 'main/loss', 'main/loss/loc','main/loss/conf']))
 trainer.extend(save_model(model,SAVE_PATH,save_after=0),trigger=(50000,'iteration'))
-trainer.extend(evaluate_model(model,evaluator,gpu_id) ,trigger=(200000,'iteration'))
 
 if continuous:
    chainer.serializers.load_npz(os.path.join(SAVE_PATH), model,)
