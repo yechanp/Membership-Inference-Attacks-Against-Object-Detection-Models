@@ -338,7 +338,7 @@ def generate_pointsets(imgs,model,num_logit_feature=1,max_len=MAX_LEN,input_size
             max_feat_len_now = max([len(item) for item in bbox_size300_list])
             if max_feat_len < max_feat_len_now :
                 max_feat_len = max_feat_len_now
-                print('max feat len : {}'.format(max_feat_len))
+                #print('max feat len : {}'.format(max_feat_len))
             
             min_feat_len_now = min([len(item) for item in bbox_size300_list])
             if min_feat_len > min_feat_len_now:
